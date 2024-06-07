@@ -1,28 +1,20 @@
-const express = require('express');
-const cors = require('cors')
+import express from 'express'
+import cors from 'cors'
+import { userRouter } from './route/UserRouter.js';
+import connectDB from './db/config.js';
+
 const app = express()
+
 
 app.use(cors())
 app.use(express.json());
 
-
-app.get('/',(req,res)=>{
+connectDB()
+app.get('/', (req, res) => {
     res.send("hello");
 })
 
-app.post('/signup', async (req, res) => {
-    try {
-        const responce = await req.body
-        console.log(responce)
-        res.status(200).json({ message: 'Signup successful', data: responce });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: 'Internal server error' });
-    }
-})
-app.get('/check',(req,res)=>{
-    res.send("check");
-})
+app.use('/user', userRouter)
 
 app.listen(8000);
 
