@@ -20,7 +20,10 @@ app.post('/signup', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 })
+app.get('/check',(req,res)=>{
+    res.send("check");
+})
 
-app.listen(8000)
+app.listen(8000);
 
-console.log('8000 working')
+console.log('8000 working');
