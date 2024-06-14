@@ -5,8 +5,11 @@ const userSchema = new mongoose.Schema({
     email: String,
     phone: String,
     password: String,
-    userId:String,
-    token:String
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    token: String
 });
 
 const User = mongoose.model("users", userSchema)

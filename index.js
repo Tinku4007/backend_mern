@@ -6,17 +6,16 @@ import { productRouter } from './route/ProductRouter.js';
 
 const app = express()
 
-
 app.use(cors())
 app.use(express.json());
 
 connectDB();
-app.use(express.static("Public"));
 
 app.get('/', (req, res) => {
     res.send("hello");
 })
 
+app.use(express.static("public"));
 app.use('/user', userRouter)
 app.use('/', productRouter)
 

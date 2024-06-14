@@ -1,20 +1,23 @@
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import Jwt from 'jsonwebtoken';
 
-const uploadDir = './Public/uploads';
+const JwtKey = "e-com";
 
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
+export function verifyToken(req, res, next) {
+    let token = req.headers['authorization']; // Correct way to access headers
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    if (token) {
+        token = token.split(' ')[1];
+
+        Jwt.verify(token, JwtKey, (err, valid) => {
+            if (err) {
+                console.error("Token verification error:", err); // Debug: Print the error
+                return res.status(401).send({ result: "Please provide a valid token" });
+            } else {
+                next();
+            }
+        });
+    } else {
+        console.warn("No token found in request headers"); // Debug: Warn if no token found
+        res.status(403).send({ result: "Please add a token in the header" });
     }
-});
-
-export const upload = multer({ storage: storage });
+}

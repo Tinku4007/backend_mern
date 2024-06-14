@@ -1,20 +1,12 @@
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-
-const uploadDir = './Public/uploads';
-
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
+    destination: function (req, file, cb) {  // `file` parameter instead of `res`
+        cb(null, 'public/uploads');
     },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    filename: function (req, file, cb) {  // `file` parameter instead of `res`
+        cb(null, file.fieldname + "-" + Date.now() + ".jpg");
     }
 });
 
-export const upload = multer({ storage: storage });
+export const upload = multer({ storage }).single("user_file");
